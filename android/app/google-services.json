@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "509621920091",
+    "firebase_url": "https://feiradigital-a5caa.firebaseio.com",
+    "project_id": "feiradigital-a5caa",
+    "storage_bucket": "feiradigital-a5caa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509621920091:android:44220dfa57f5c8a4dafa7e",
+        "android_client_info": {
+          "package_name": "br.com.leonardo.feira"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "509621920091-o3r7hr6sd5no6ep6vui74sa01346882v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB95Khf79m06YpO_l84-ndHugSPQmwxxfo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "509621920091-o3r7hr6sd5no6ep6vui74sa01346882v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

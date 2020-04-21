@@ -1,0 +1,8 @@
+adicionar mascara aos campos inputs
+
+usuario
+	criar cadastro
+	se cadastrar por completo
+	inserir veiculo
+	comprar cartões
+	estacionar e ativar cartão
