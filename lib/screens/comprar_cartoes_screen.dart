@@ -25,20 +25,22 @@ class _ComprarCartoesScreenState extends State<ComprarCartoesScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _disposers.add(autorun((_) async {
-      if (_cartoes.retornarComprarRealizadaSucesso) {
-        _scaffoldKey.currentState.showSnackBar(SnackBar(
-          content: Text(
-            "Compra Realizada com sucesso",
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 4),
-        ));
-      }
-
-      else {
-         _scaffoldKey.currentState.showSnackBar(SnackBar(
+    _disposers.add(autorun((_) {
+      switch (_cartoes.retornarEstadoCompra) {
+        case ESTADOCOMPRA.NULL:
+          break;
+        case ESTADOCOMPRA.SUCESSO:
+          _scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text(
+              "Compra Realizada com sucesso",
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 4),
+          ));
+          break;
+        case ESTADOCOMPRA.FALHA:
+          _scaffoldKey.currentState.showSnackBar(SnackBar(
             content: Text(
               "Erro ao realizar compra",
               style: TextStyle(color: Colors.white),
@@ -46,6 +48,7 @@ class _ComprarCartoesScreenState extends State<ComprarCartoesScreen> {
             backgroundColor: Colors.red,
             duration: Duration(seconds: 4),
           ));
+          break;
       }
     }));
   }

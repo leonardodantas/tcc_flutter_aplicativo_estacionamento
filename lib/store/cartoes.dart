@@ -7,6 +7,7 @@ part 'cartoes.g.dart';
 class Cartoes = _CartoesBase with _$Cartoes;
 
 enum ESTADOTELADECOMPRA { IDLE, AGUARDANDO }
+enum ESTADOCOMPRA { NULL, SUCESSO, FALHA }
 
 abstract class _CartoesBase with Store {
   /**
@@ -52,6 +53,18 @@ abstract class _CartoesBase with Store {
     return compraRealizadaSucesso;
   }
 
+  @observable
+  ESTADOCOMPRA estadoCompra = ESTADOCOMPRA.NULL;
+
+  @action
+  alterarEstadoDeCompra(ESTADOCOMPRA novoEstadoDeCompra) =>
+      estadoCompra = novoEstadoDeCompra;
+
+  @computed
+  ESTADOCOMPRA get retornarEstadoCompra {
+    return estadoCompra;
+  }
+
   @action
   realizarCompraCartao() async {
     estadoteladecompra = ESTADOTELADECOMPRA.AGUARDANDO;
@@ -61,21 +74,43 @@ abstract class _CartoesBase with Store {
     FirebaseUser firebaseUser = await _auth.currentUser();
     String uid = firebaseUser.uid;
 
-    Map<String, dynamic> data = {
-      "quantidade": valorTotal,
-      "data_compra": new DateTime.now()
-    };
     try {
-      await _firestore
-          .collection("users")
-          .document(uid)
-          .collection("compra_cartoes")
-          .add(data);
+      Map<String, dynamic> data = convertCartoesComprados();
+      await inserirCartaoComprado(uid, data, _firestore);
+      valorTotal = 1.0;
+      await atualizarQuantidadeDeCartoesUsuario(uid, _firestore, _auth);
+      await alterarEstadoDeCompra(ESTADOCOMPRA.SUCESSO);
+      await alterarEstadoDeCompra(ESTADOCOMPRA.NULL);
     } catch (e) {
-
+      compraRealizadaSucesso = false;
+      alterarEstadoDeCompra(ESTADOCOMPRA.FALHA);
     } finally {
       estadoteladecompra = ESTADOTELADECOMPRA.IDLE;
-      compraRealizadaSucesso = true;
     }
+  }
+
+  Map<String, dynamic> convertCartoesComprados() {
+    return {"quantidade": valorTotal, "data_compra": new DateTime.now()};
+  }
+
+  Future<void> inserirCartaoComprado(
+      String uid, Map<String, dynamic> data, Firestore _firestore) async {
+    await _firestore
+        .collection("users")
+        .document(uid)
+        .collection("compra_cartoes")
+        .add(data);
+  }
+
+  atualizarQuantidadeDeCartoesUsuario(
+      String uid, Firestore _firestore, FirebaseAuth _auth) async {
+    DocumentSnapshot documentSnapshot = await _firestore
+        .collection("users")
+        .document(uid)
+        .collection("qtd_cartoes")
+        .document(uid)
+        .get();
+
+        print(documentSnapshot.data);
   }
 }

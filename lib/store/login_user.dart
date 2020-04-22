@@ -134,7 +134,6 @@ abstract class _LoginUserBase with Store {
     _firebaseAuth = FirebaseAuth.instance;
     _firestore = Firestore.instance;
     cadastrarLoading = true;
-
     await _firebaseAuth
         .createUserWithEmailAndPassword(
             email: usuario.email, password: usuario.password)
@@ -149,6 +148,8 @@ abstract class _LoginUserBase with Store {
           .then((value) {
         state = STATES.SUCCESS;
       });
+
+      _firestore.collection("users").document(uid).collection("qtd_cartoes").document(uid).setData({"qtd": 0});
     }).catchError((e) {
       cadastrarLoading = false;
       state = STATES.FAIL;

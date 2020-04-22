@@ -16,6 +16,19 @@ mixin _$Cartoes on _CartoesBase, Store {
       (_$verificarEstadoTelaDeCompraComputed ??= Computed<ESTADOTELADECOMPRA>(
               () => super.verificarEstadoTelaDeCompra))
           .value;
+  Computed<bool> _$retornarComprarRealizadaSucessoComputed;
+
+  @override
+  bool get retornarComprarRealizadaSucesso =>
+      (_$retornarComprarRealizadaSucessoComputed ??=
+              Computed<bool>(() => super.retornarComprarRealizadaSucesso))
+          .value;
+  Computed<ESTADOCOMPRA> _$retornarEstadoCompraComputed;
+
+  @override
+  ESTADOCOMPRA get retornarEstadoCompra => (_$retornarEstadoCompraComputed ??=
+          Computed<ESTADOCOMPRA>(() => super.retornarEstadoCompra))
+      .value;
 
   final _$valorUnitarioAtom = Atom(name: '_CartoesBase.valorUnitario');
 
@@ -87,6 +100,51 @@ mixin _$Cartoes on _CartoesBase, Store {
     }, _$estadoteladecompraAtom, name: '${_$estadoteladecompraAtom.name}_set');
   }
 
+  final _$compraRealizadaSucessoAtom =
+      Atom(name: '_CartoesBase.compraRealizadaSucesso');
+
+  @override
+  bool get compraRealizadaSucesso {
+    _$compraRealizadaSucessoAtom.context
+        .enforceReadPolicy(_$compraRealizadaSucessoAtom);
+    _$compraRealizadaSucessoAtom.reportObserved();
+    return super.compraRealizadaSucesso;
+  }
+
+  @override
+  set compraRealizadaSucesso(bool value) {
+    _$compraRealizadaSucessoAtom.context.conditionallyRunInAction(() {
+      super.compraRealizadaSucesso = value;
+      _$compraRealizadaSucessoAtom.reportChanged();
+    }, _$compraRealizadaSucessoAtom,
+        name: '${_$compraRealizadaSucessoAtom.name}_set');
+  }
+
+  final _$estadoCompraAtom = Atom(name: '_CartoesBase.estadoCompra');
+
+  @override
+  ESTADOCOMPRA get estadoCompra {
+    _$estadoCompraAtom.context.enforceReadPolicy(_$estadoCompraAtom);
+    _$estadoCompraAtom.reportObserved();
+    return super.estadoCompra;
+  }
+
+  @override
+  set estadoCompra(ESTADOCOMPRA value) {
+    _$estadoCompraAtom.context.conditionallyRunInAction(() {
+      super.estadoCompra = value;
+      _$estadoCompraAtom.reportChanged();
+    }, _$estadoCompraAtom, name: '${_$estadoCompraAtom.name}_set');
+  }
+
+  final _$realizarCompraCartaoAsyncAction = AsyncAction('realizarCompraCartao');
+
+  @override
+  Future realizarCompraCartao() {
+    return _$realizarCompraCartaoAsyncAction
+        .run(() => super.realizarCompraCartao());
+  }
+
   final _$_CartoesBaseActionController = ActionController(name: '_CartoesBase');
 
   @override
@@ -100,9 +158,19 @@ mixin _$Cartoes on _CartoesBase, Store {
   }
 
   @override
+  dynamic alterarEstadoDeCompra(ESTADOCOMPRA novoEstadoDeCompra) {
+    final _$actionInfo = _$_CartoesBaseActionController.startAction();
+    try {
+      return super.alterarEstadoDeCompra(novoEstadoDeCompra);
+    } finally {
+      _$_CartoesBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     final string =
-        'valorUnitario: ${valorUnitario.toString()},valorTotal: ${valorTotal.toString()},cartaoSelecionado: ${cartaoSelecionado.toString()},estadoteladecompra: ${estadoteladecompra.toString()},verificarEstadoTelaDeCompra: ${verificarEstadoTelaDeCompra.toString()}';
+        'valorUnitario: ${valorUnitario.toString()},valorTotal: ${valorTotal.toString()},cartaoSelecionado: ${cartaoSelecionado.toString()},estadoteladecompra: ${estadoteladecompra.toString()},compraRealizadaSucesso: ${compraRealizadaSucesso.toString()},estadoCompra: ${estadoCompra.toString()},verificarEstadoTelaDeCompra: ${verificarEstadoTelaDeCompra.toString()},retornarComprarRealizadaSucesso: ${retornarComprarRealizadaSucesso.toString()},retornarEstadoCompra: ${retornarEstadoCompra.toString()}';
     return '{$string}';
   }
 }
