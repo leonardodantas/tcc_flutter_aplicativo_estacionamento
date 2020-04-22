@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class CheckBox extends StatelessWidget {
 
-  final String text;
+  final String text; 
   final List<String> opcoes;
   final Function radionButtonValue;
   final Function checkBoxButtonValues;

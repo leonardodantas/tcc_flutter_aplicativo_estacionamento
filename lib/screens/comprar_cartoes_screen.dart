@@ -1,5 +1,9 @@
+import 'package:feira/store/cartoes.dart';
 import 'package:feira/widgets/tiles/buttonbig_tile.dart';
+import 'package:feira/widgets/tiles/radio_button_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 
 class ComprarCartoesScreen extends StatefulWidget {
   @override
@@ -7,79 +11,153 @@ class ComprarCartoesScreen extends StatefulWidget {
 }
 
 class _ComprarCartoesScreenState extends State<ComprarCartoesScreen> {
-  String _currentValor;
+  Cartoes _cartoes = new Cartoes();
+  final List<ReactionDisposer> _disposers = [];
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Comprar Cartões"),
-        centerTitle: true,
-      ),
-      body: Container(
-        padding: EdgeInsets.only(top: 80, left: 20, right: 20),
-        child: Form(
-          child: ListView(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    "Valor Unitario:",
-                    style: TextStyle(
-                        fontSize: 27,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue),
-                  ),
-                  Text(
-                    "R\$ 1,00",
-                    style: TextStyle(
-                        fontSize: 27,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue),
-                  )
-                ],
-              ),
-              SizedBox(height: 30,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Seleciona a quantidade:",
-                      style: TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue)),
-                  DropdownButton(
-                      style: TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue),
-                      onChanged: (v) {
-                        _currentValor = v;
-                      },
-                      value: _currentValor,
-                      items: getItens()),
-                ],
-              ),
-              SizedBox(height: 30,),
-              ButtonBig(textoBotao: "Comprar", corBorda: Colors.blue, corTexto: Colors.blue)
-            ],
-          ),
-        ),
-      ),
-    );
+  void dispose() {
+    _disposers.forEach((disposer) => disposer());
+    super.dispose();
   }
 
-  List<DropdownMenuItem<String>> getItens() {
-    List<DropdownMenuItem<String>> itens = new List();
-    
-    for (var i = 0; i < 10; i++) {
-      
-      String value = i.toString();
-      itens.add(new DropdownMenuItem(
-          child: new Text(value), value: i.toString() + "a"));
-        _currentValor = itens[0].value;
-    }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-    return itens;
+    _disposers.add(autorun((_) async {
+      if (_cartoes.retornarComprarRealizadaSucesso) {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text(
+            "Compra Realizada com sucesso",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 4),
+        ));
+      }
+
+      else {
+         _scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text(
+              "Erro ao realizar compra",
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 4),
+          ));
+      }
+    }));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print("Montando tela de cartoes");
+    return Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text("Comprar Cartões"),
+          centerTitle: true,
+        ),
+        body: Observer(builder: (_) {
+          switch (_cartoes.verificarEstadoTelaDeCompra) {
+            case ESTADOTELADECOMPRA.IDLE:
+              return Container(
+                padding: EdgeInsets.only(top: 80, left: 20, right: 20),
+                child: Form(
+                  child: ListView(
+                    children: <Widget>[
+                      RadioButtonTileVetical(
+                        text: "Selecione a quantidade:",
+                        options: ["1", "2", "3", "4", "5"],
+                        radionButtonValue: _cartoes.escolherCartao,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Container(
+                          decoration: new BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: new BorderRadius.only(
+                                bottomLeft: const Radius.circular(40.0),
+                                bottomRight: const Radius.circular(40.0),
+                                topLeft: const Radius.circular(40.0),
+                                topRight: const Radius.circular(40.0),
+                              )),
+                          alignment: Alignment.center,
+                          height: 300,
+                          child: Observer(
+                            builder: (retornarValorTotal) {
+                              return Text(
+                                "R\$ ${_cartoes.valorTotal.toStringAsFixed(2)}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 36),
+                              );
+                            },
+                          )),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      ButtonBig(
+                        textoBotao: "Comprar",
+                        corBorda: Colors.blue,
+                        corTexto: Colors.blue,
+                        function: _showDialog,
+                      )
+                    ],
+                  ),
+                ),
+              );
+              break;
+            case ESTADOTELADECOMPRA.AGUARDANDO:
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(Colors.blue),
+                ),
+              );
+              break;
+            default:
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(Colors.blue),
+                ),
+              );
+              break;
+          }
+        }));
+  }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Confirmar Compra?"),
+          content: new Text(
+              "O valor será inserido no cartão credito/debito cadastrado no aplicativo"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Confirmar"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            new FlatButton(
+              child: new Text("Cancelar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    ).then((v) {
+      _cartoes.realizarCompraCartao();
+    });
   }
 }
