@@ -39,6 +39,7 @@ class _LoginState extends State<Login> {
 
     _disposers.add(autorun((_) async {
       switch (_loginUser.state) {
+        
         case STATES.IDEL:
           break;
         case STATES.SUCCESS:

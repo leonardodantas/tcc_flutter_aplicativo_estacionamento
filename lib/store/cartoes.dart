@@ -10,12 +10,6 @@ enum ESTADOTELADECOMPRA { IDLE, AGUARDANDO }
 enum ESTADOCOMPRA { NULL, SUCESSO, FALHA }
 
 abstract class _CartoesBase with Store {
-  /**
-   * 
-   * CRIAR SNACKBAR PARA COMPRA REALZIADA COM SUCESSO OU COM FALHA
-   * 
-   * 
-   */
   FirebaseAuth _auth;
   Firestore _firestore;
 
@@ -68,7 +62,7 @@ abstract class _CartoesBase with Store {
   @action
   realizarCompraCartao() async {
     estadoteladecompra = ESTADOTELADECOMPRA.AGUARDANDO;
-    print(valorTotal);
+
     _auth = FirebaseAuth.instance;
     _firestore = Firestore.instance;
     FirebaseUser firebaseUser = await _auth.currentUser();
@@ -77,10 +71,11 @@ abstract class _CartoesBase with Store {
     try {
       Map<String, dynamic> data = convertCartoesComprados();
       await inserirCartaoComprado(uid, data, _firestore);
-      valorTotal = 1.0;
+
       await atualizarQuantidadeDeCartoesUsuario(uid, _firestore, _auth);
       await alterarEstadoDeCompra(ESTADOCOMPRA.SUCESSO);
       await alterarEstadoDeCompra(ESTADOCOMPRA.NULL);
+      valorTotal = 1.0;
     } catch (e) {
       compraRealizadaSucesso = false;
       alterarEstadoDeCompra(ESTADOCOMPRA.FALHA);
@@ -104,13 +99,26 @@ abstract class _CartoesBase with Store {
 
   atualizarQuantidadeDeCartoesUsuario(
       String uid, Firestore _firestore, FirebaseAuth _auth) async {
-    DocumentSnapshot documentSnapshot = await _firestore
-        .collection("users")
-        .document(uid)
-        .collection("qtd_cartoes")
-        .document(uid)
-        .get();
+    try {
+      DocumentSnapshot documentSnapshot = await _firestore
+          .collection("users")
+          .document(uid)
+          .collection("qtd_cartoes")
+          .document(uid)
+          .get();
 
-        print(documentSnapshot.data);
+      double quantidadeUsuario = documentSnapshot.data["qtd"];
+      double quantidadeComprada = valorTotal;
+
+      double novaQuantidade = quantidadeComprada + quantidadeUsuario.toDouble();
+      await _firestore
+          .collection("users")
+          .document(uid)
+          .collection("qtd_cartoes")
+          .document(uid)
+          .setData({"qtd": novaQuantidade});
+    } catch (e) {
+      print(e);
+    }
   }
 }

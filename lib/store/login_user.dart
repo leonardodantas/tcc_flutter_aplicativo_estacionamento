@@ -8,7 +8,7 @@ part 'login_user.g.dart';
 
 enum STATES { IDEL, SUCCESS, FAIL }
 enum CADASTROCONCLUIDOESTADO { IDEL, SUCCESS, FAIL }
-enum ESTADOPAGINAAOINICIARAPLICATIVO {CARREGANDO, LOGADO, NAOLOGADO}
+enum ESTADOPAGINAAOINICIARAPLICATIVO { CARREGANDO, LOGADO, NAOLOGADO }
 
 class LoginUser = _LoginUserBase with _$LoginUser;
 
@@ -50,18 +50,19 @@ abstract class _LoginUserBase with Store {
   @action
   alterarEstadoCadastroConcluido(CADASTROCONCLUIDOESTADO estado) =>
       cadastroconcluidoestado = estado;
-    
-  @observable 
-  ESTADOPAGINAAOINICIARAPLICATIVO estadoPaginaAoIniciarAplicativo; 
-  
+
+  @observable
+  ESTADOPAGINAAOINICIARAPLICATIVO estadoPaginaAoIniciarAplicativo;
+
   @action
-  alterarEstadoTelaInicial(ESTADOPAGINAAOINICIARAPLICATIVO novoEstado) => estadoPaginaAoIniciarAplicativo = novoEstado;
+  alterarEstadoTelaInicial(ESTADOPAGINAAOINICIARAPLICATIVO novoEstado) =>
+      estadoPaginaAoIniciarAplicativo = novoEstado;
 
   @computed
   ESTADOPAGINAAOINICIARAPLICATIVO get verificarEstadoPaginaInicial {
     return estadoPaginaAoIniciarAplicativo;
   }
-  
+
   @action
   Future login() async {
     _firebaseAuth = FirebaseAuth.instance;
@@ -75,6 +76,8 @@ abstract class _LoginUserBase with Store {
 
       mudarEstadoPaginaLogin(STATES.SUCCESS);
     } catch (e) {
+      print('--------------------------------');
+      print(e);
       mudarEstadoPaginaLogin(STATES.FAIL);
     }
   }
@@ -85,7 +88,7 @@ abstract class _LoginUserBase with Store {
     cadastrarLoading = false;
   }
 
-  @observable 
+  @observable
   bool logoutRealizado = false;
 
   @action
@@ -111,22 +114,19 @@ abstract class _LoginUserBase with Store {
     _firebaseAuth = FirebaseAuth.instance;
     FirebaseUser firebaseUser = await _firebaseAuth.currentUser();
 
-    if(firebaseUser != null){
+    if (firebaseUser != null) {
       await recuperarTodosOsDadosDoUsuario(firebaseUser.uid);
       alterarEstadoTelaInicial(ESTADOPAGINAAOINICIARAPLICATIVO.LOGADO);
-      print(estadoPaginaAoIniciarAplicativo);
     } else {
       alterarEstadoTelaInicial(ESTADOPAGINAAOINICIARAPLICATIVO.NAOLOGADO);
     }
     return firebaseUser != null;
   }
 
-  Future<void> recuperarTodosOsDadosDoUsuario(String uid) async {
+  recuperarTodosOsDadosDoUsuario(String uid) async {
     _firestore = Firestore.instance;
     var dados = await _firestore.collection("users").document(uid).get();
-    print('------------------------------');
-    print(dados);
-    usuario.toUser(dados, uid);
+    return usuario.toUser(dados, uid);
   }
 
   @action
@@ -136,7 +136,7 @@ abstract class _LoginUserBase with Store {
     cadastrarLoading = true;
     await _firebaseAuth
         .createUserWithEmailAndPassword(
-            email: usuario.email, password: usuario.password)
+            email: usuario.email.trim(), password: usuario.password)
         .then((user) {
       var uid = user.user.uid;
       var novoUsuario = usuario.toMap();
@@ -149,7 +149,12 @@ abstract class _LoginUserBase with Store {
         state = STATES.SUCCESS;
       });
 
-      _firestore.collection("users").document(uid).collection("qtd_cartoes").document(uid).setData({"qtd": 0});
+      _firestore
+          .collection("users")
+          .document(uid)
+          .collection("qtd_cartoes")
+          .document(uid)
+          .setData({"qtd": 0});
     }).catchError((e) {
       cadastrarLoading = false;
       state = STATES.FAIL;

@@ -24,7 +24,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    print('montou tela');
     return Scaffold(
       body: Container(
         child: Observer(builder: (_) {

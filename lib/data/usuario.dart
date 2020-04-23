@@ -67,7 +67,7 @@ abstract class _UsuarioBase with Store {
   String siglaNomeUsuario;
 
   Map<String, dynamic> toMap() {
-    return {'name': name, 'email': email, 'cadastro_concluido': false};
+    return {'name': name.trim(), 'email': email, 'cadastro_concluido': false};
   }
 
   void toUser(DocumentSnapshot document, String uid) {
@@ -81,6 +81,7 @@ abstract class _UsuarioBase with Store {
   void criarSiglaParaOUsuario() {
     List<String> nomeDividido = name.split(' ');
     String siglaNome = '';
+    print(nomeDividido);
     nomeDividido.forEach((n) => siglaNome += n.toUpperCase().substring(0, 1));
     siglaNomeUsuario = siglaNome.substring(0, 1) + siglaNome.substring(1, 2);
   }
