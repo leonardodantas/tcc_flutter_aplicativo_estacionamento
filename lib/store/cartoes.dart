@@ -8,6 +8,7 @@ class Cartoes = _CartoesBase with _$Cartoes;
 
 enum ESTADOTELADECOMPRA { IDLE, AGUARDANDO }
 enum ESTADOCOMPRA { NULL, SUCESSO, FALHA }
+enum ESTADOCARREGANDOQUANTIDADECARTOES {CARREGANDO, SUCCESS}
 
 abstract class _CartoesBase with Store {
   FirebaseAuth _auth;
@@ -21,6 +22,29 @@ abstract class _CartoesBase with Store {
 
   @observable
   String cartaoSelecionado;
+
+  @observable
+  double qtdCartoesUsuario = 0;
+
+  @action
+  alterarQuantidadeCartoesUsuario(double novaQuantidade) => qtdCartoesUsuario = novaQuantidade;
+
+  @computed
+  get quantidadeDeCartoesDoUsuario {
+    return qtdCartoesUsuario;
+  }
+
+  @observable
+  ESTADOCARREGANDOQUANTIDADECARTOES _estadocarregandoquantidadecartoes;
+
+  @computed
+  ESTADOCARREGANDOQUANTIDADECARTOES get estadocarreadoquantidadecartoes  {
+    return _estadocarregandoquantidadecartoes;
+  }
+
+  @action
+  alterarEstadoCarregandoQuantidadeCartoes(ESTADOCARREGANDOQUANTIDADECARTOES novoEstado) => _estadocarregandoquantidadecartoes = novoEstado;
+
 
   double get retornarValorTotal {
     return valorTotal;
@@ -60,13 +84,39 @@ abstract class _CartoesBase with Store {
   }
 
   @action
+  verificarQuantidadeDeCartoesUsuario() async{
+    alterarEstadoCarregandoQuantidadeCartoes(ESTADOCARREGANDOQUANTIDADECARTOES.CARREGANDO);
+    _auth = FirebaseAuth.instance;
+    _firestore = Firestore.instance;
+    String uid  = await recuperarUidUsuario();
+    double valor = await recuperarQuantidadeDeCartoesDoUsuario(uid);
+    alterarQuantidadeCartoesUsuario(valor);
+    alterarEstadoCarregandoQuantidadeCartoes(ESTADOCARREGANDOQUANTIDADECARTOES.SUCCESS);
+  }
+
+  Future<double> recuperarQuantidadeDeCartoesDoUsuario(String uid) async {
+    DocumentSnapshot documentSnapshot = await _firestore
+          .collection("users")
+          .document(uid)
+          .collection("qtd_cartoes")
+          .document(uid)
+          .get();
+    double valor = documentSnapshot.data["qtd"];
+    return valor;
+  }
+
+  Future<String> recuperarUidUsuario() async {
+    FirebaseUser firebaseUser = await _auth.currentUser();
+    return firebaseUser.uid;
+  }
+
+  @action
   realizarCompraCartao() async {
     estadoteladecompra = ESTADOTELADECOMPRA.AGUARDANDO;
 
     _auth = FirebaseAuth.instance;
     _firestore = Firestore.instance;
-    FirebaseUser firebaseUser = await _auth.currentUser();
-    String uid = firebaseUser.uid;
+    String uid  = await recuperarUidUsuario();
 
     try {
       Map<String, dynamic> data = convertCartoesComprados();
@@ -100,14 +150,7 @@ abstract class _CartoesBase with Store {
   atualizarQuantidadeDeCartoesUsuario(
       String uid, Firestore _firestore, FirebaseAuth _auth) async {
     try {
-      DocumentSnapshot documentSnapshot = await _firestore
-          .collection("users")
-          .document(uid)
-          .collection("qtd_cartoes")
-          .document(uid)
-          .get();
-
-      double quantidadeUsuario = documentSnapshot.data["qtd"];
+      double quantidadeUsuario = await recuperarQuantidadeDeCartoesDoUsuario(uid);
       double quantidadeComprada = valorTotal;
 
       double novaQuantidade = quantidadeComprada + quantidadeUsuario.toDouble();

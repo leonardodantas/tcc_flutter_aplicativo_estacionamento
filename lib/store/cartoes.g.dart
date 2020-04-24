@@ -9,6 +9,22 @@ part of 'cartoes.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$Cartoes on _CartoesBase, Store {
+  Computed<dynamic> _$quantidadeDeCartoesDoUsuarioComputed;
+
+  @override
+  dynamic get quantidadeDeCartoesDoUsuario =>
+      (_$quantidadeDeCartoesDoUsuarioComputed ??=
+              Computed<dynamic>(() => super.quantidadeDeCartoesDoUsuario))
+          .value;
+  Computed<ESTADOCARREGANDOQUANTIDADECARTOES>
+      _$estadocarreadoquantidadecartoesComputed;
+
+  @override
+  ESTADOCARREGANDOQUANTIDADECARTOES get estadocarreadoquantidadecartoes =>
+      (_$estadocarreadoquantidadecartoesComputed ??=
+              Computed<ESTADOCARREGANDOQUANTIDADECARTOES>(
+                  () => super.estadocarreadoquantidadecartoes))
+          .value;
   Computed<ESTADOTELADECOMPRA> _$verificarEstadoTelaDeCompraComputed;
 
   @override
@@ -81,6 +97,45 @@ mixin _$Cartoes on _CartoesBase, Store {
     }, _$cartaoSelecionadoAtom, name: '${_$cartaoSelecionadoAtom.name}_set');
   }
 
+  final _$qtdCartoesUsuarioAtom = Atom(name: '_CartoesBase.qtdCartoesUsuario');
+
+  @override
+  double get qtdCartoesUsuario {
+    _$qtdCartoesUsuarioAtom.context.enforceReadPolicy(_$qtdCartoesUsuarioAtom);
+    _$qtdCartoesUsuarioAtom.reportObserved();
+    return super.qtdCartoesUsuario;
+  }
+
+  @override
+  set qtdCartoesUsuario(double value) {
+    _$qtdCartoesUsuarioAtom.context.conditionallyRunInAction(() {
+      super.qtdCartoesUsuario = value;
+      _$qtdCartoesUsuarioAtom.reportChanged();
+    }, _$qtdCartoesUsuarioAtom, name: '${_$qtdCartoesUsuarioAtom.name}_set');
+  }
+
+  final _$_estadocarregandoquantidadecartoesAtom =
+      Atom(name: '_CartoesBase._estadocarregandoquantidadecartoes');
+
+  @override
+  ESTADOCARREGANDOQUANTIDADECARTOES get _estadocarregandoquantidadecartoes {
+    _$_estadocarregandoquantidadecartoesAtom.context
+        .enforceReadPolicy(_$_estadocarregandoquantidadecartoesAtom);
+    _$_estadocarregandoquantidadecartoesAtom.reportObserved();
+    return super._estadocarregandoquantidadecartoes;
+  }
+
+  @override
+  set _estadocarregandoquantidadecartoes(
+      ESTADOCARREGANDOQUANTIDADECARTOES value) {
+    _$_estadocarregandoquantidadecartoesAtom.context.conditionallyRunInAction(
+        () {
+      super._estadocarregandoquantidadecartoes = value;
+      _$_estadocarregandoquantidadecartoesAtom.reportChanged();
+    }, _$_estadocarregandoquantidadecartoesAtom,
+        name: '${_$_estadocarregandoquantidadecartoesAtom.name}_set');
+  }
+
   final _$estadoteladecompraAtom =
       Atom(name: '_CartoesBase.estadoteladecompra');
 
@@ -137,6 +192,15 @@ mixin _$Cartoes on _CartoesBase, Store {
     }, _$estadoCompraAtom, name: '${_$estadoCompraAtom.name}_set');
   }
 
+  final _$verificarQuantidadeDeCartoesUsuarioAsyncAction =
+      AsyncAction('verificarQuantidadeDeCartoesUsuario');
+
+  @override
+  Future verificarQuantidadeDeCartoesUsuario() {
+    return _$verificarQuantidadeDeCartoesUsuarioAsyncAction
+        .run(() => super.verificarQuantidadeDeCartoesUsuario());
+  }
+
   final _$realizarCompraCartaoAsyncAction = AsyncAction('realizarCompraCartao');
 
   @override
@@ -146,6 +210,27 @@ mixin _$Cartoes on _CartoesBase, Store {
   }
 
   final _$_CartoesBaseActionController = ActionController(name: '_CartoesBase');
+
+  @override
+  dynamic alterarQuantidadeCartoesUsuario(double novaQuantidade) {
+    final _$actionInfo = _$_CartoesBaseActionController.startAction();
+    try {
+      return super.alterarQuantidadeCartoesUsuario(novaQuantidade);
+    } finally {
+      _$_CartoesBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic alterarEstadoCarregandoQuantidadeCartoes(
+      ESTADOCARREGANDOQUANTIDADECARTOES novoEstado) {
+    final _$actionInfo = _$_CartoesBaseActionController.startAction();
+    try {
+      return super.alterarEstadoCarregandoQuantidadeCartoes(novoEstado);
+    } finally {
+      _$_CartoesBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic escolherCartao(dynamic value) {
@@ -170,7 +255,7 @@ mixin _$Cartoes on _CartoesBase, Store {
   @override
   String toString() {
     final string =
-        'valorUnitario: ${valorUnitario.toString()},valorTotal: ${valorTotal.toString()},cartaoSelecionado: ${cartaoSelecionado.toString()},estadoteladecompra: ${estadoteladecompra.toString()},compraRealizadaSucesso: ${compraRealizadaSucesso.toString()},estadoCompra: ${estadoCompra.toString()},verificarEstadoTelaDeCompra: ${verificarEstadoTelaDeCompra.toString()},retornarComprarRealizadaSucesso: ${retornarComprarRealizadaSucesso.toString()},retornarEstadoCompra: ${retornarEstadoCompra.toString()}';
+        'valorUnitario: ${valorUnitario.toString()},valorTotal: ${valorTotal.toString()},cartaoSelecionado: ${cartaoSelecionado.toString()},qtdCartoesUsuario: ${qtdCartoesUsuario.toString()},estadoteladecompra: ${estadoteladecompra.toString()},compraRealizadaSucesso: ${compraRealizadaSucesso.toString()},estadoCompra: ${estadoCompra.toString()},quantidadeDeCartoesDoUsuario: ${quantidadeDeCartoesDoUsuario.toString()},estadocarreadoquantidadecartoes: ${estadocarreadoquantidadecartoes.toString()},verificarEstadoTelaDeCompra: ${verificarEstadoTelaDeCompra.toString()},retornarComprarRealizadaSucesso: ${retornarComprarRealizadaSucesso.toString()},retornarEstadoCompra: ${retornarEstadoCompra.toString()}';
     return '{$string}';
   }
 }

@@ -3,6 +3,7 @@ import 'package:feira/widgets/tiles/buttonbig_tile.dart';
 import 'package:feira/widgets/tiles/radio_button_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
 class ComprarCartoesScreen extends StatefulWidget {
@@ -11,7 +12,8 @@ class ComprarCartoesScreen extends StatefulWidget {
 }
 
 class _ComprarCartoesScreenState extends State<ComprarCartoesScreen> {
-  Cartoes _cartoes = new Cartoes();
+  
+  final _cartoes = GetIt.I.get<Cartoes>();
   final List<ReactionDisposer> _disposers = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -160,7 +162,12 @@ class _ComprarCartoesScreenState extends State<ComprarCartoesScreen> {
         );
       },
     ).then((v) {
-      _cartoes.realizarCompraCartao();
+      _cartoes.realizarCompraCartao().then((v) {
+        
+        _cartoes.verificarQuantidadeDeCartoesUsuario();
+        print('nova quanidade');
+        print(_cartoes.quantidadeDeCartoesDoUsuario);
+      });
     });
   }
 }
