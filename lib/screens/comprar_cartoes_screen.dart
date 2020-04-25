@@ -57,7 +57,6 @@ class _ComprarCartoesScreenState extends State<ComprarCartoesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("Montando tela de cartoes");
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -165,8 +164,7 @@ class _ComprarCartoesScreenState extends State<ComprarCartoesScreen> {
       _cartoes.realizarCompraCartao().then((v) {
         
         _cartoes.verificarQuantidadeDeCartoesUsuario();
-        print('nova quanidade');
-        print(_cartoes.quantidadeDeCartoesDoUsuario);
+      
       });
     });
   }

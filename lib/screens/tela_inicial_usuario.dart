@@ -1,5 +1,6 @@
 import 'package:feira/screens/comprar_cartoes_screen.dart';
 import 'package:feira/screens/home_screen.dart';
+import 'package:feira/screens/inserir_novo_cartao.dart';
 import 'package:feira/screens/tabs_usuario/inicio_usuario.dart';
 import 'package:feira/store/login_user.dart';
 import 'package:feira/widgets/custom_drawer.dart';
@@ -68,6 +69,20 @@ class _TelaInicialUsuarioScreenState extends State<TelaInicialUsuarioScreen> {
             ),
             body: Container(color: Colors.green),
             drawer: CustomDrawer(_pageCotroller)),
+            
+        Scaffold(
+          appBar: AppBar(
+            title: Text("Pagamento"),
+            centerTitle: true,
+            
+          ),
+          floatingActionButton:FloatingActionComprarCartao(onPressed: (){
+            Navigator.push(
+              context, MaterialPageRoute(builder: (context) => InserirNovoCartao()));
+          },),
+          drawer: CustomDrawer(_pageCotroller),
+          body: Container(color: Colors.red),
+        ),
         Scaffold(
             appBar: AppBar(
               title: Text("Configurações"),

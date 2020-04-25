@@ -101,7 +101,7 @@ abstract class _CartoesBase with Store {
           .collection("qtd_cartoes")
           .document(uid)
           .get();
-    double valor = documentSnapshot.data["qtd"];
+    double valor = double.parse(documentSnapshot.data["qtd"].toString());
     return valor;
   }
 

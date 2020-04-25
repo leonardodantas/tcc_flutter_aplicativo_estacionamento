@@ -17,8 +17,8 @@ class _InicioUsuarioTabState extends State<InicioUsuarioTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _cartoes.alterarEstadoCarregandoQuantidadeCartoes(ESTADOCARREGANDOQUANTIDADECARTOES.CARREGANDO);
-  }
+    _cartoes.verificarQuantidadeDeCartoesUsuario();
+  } 
 
   @override
   Widget build(BuildContext context) {

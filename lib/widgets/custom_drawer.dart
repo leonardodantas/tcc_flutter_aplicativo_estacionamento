@@ -43,8 +43,10 @@ class CustomDrawer extends StatelessWidget {
                     DrawerTiler(Icons.list, "Cupons", pageController, 1),
                     DrawerTiler(
                         Icons.directions_car, "Automoveis", pageController, 2),
-                    DrawerTiler(Icons.playlist_add_check, "Configurações",
+                    DrawerTiler(Icons.credit_card, "Pagamentos",
                         pageController, 3),
+                    DrawerTiler(Icons.playlist_add_check, "Configurações",
+                        pageController, 4),
                   ],
                 ),
               ),
