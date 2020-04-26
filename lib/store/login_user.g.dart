@@ -30,6 +30,20 @@ mixin _$LoginUser on _LoginUserBase, Store {
   bool get logoutRealizadoUsuario => (_$logoutRealizadoUsuarioComputed ??=
           Computed<bool>(() => super.logoutRealizadoUsuario))
       .value;
+  Computed<bool> _$buttonEmailParaRecuperarIsValidComputed;
+
+  @override
+  bool get buttonEmailParaRecuperarIsValid =>
+      (_$buttonEmailParaRecuperarIsValidComputed ??=
+              Computed<bool>(() => super.buttonEmailParaRecuperarIsValid))
+          .value;
+  Computed<bool> _$retornarbotaoRecuperarSenhaAcionadoComputed;
+
+  @override
+  bool get retornarbotaoRecuperarSenhaAcionado =>
+      (_$retornarbotaoRecuperarSenhaAcionadoComputed ??=
+              Computed<bool>(() => super.retornarbotaoRecuperarSenhaAcionado))
+          .value;
   Computed<bool> _$inserirComputed;
 
   @override
@@ -192,6 +206,65 @@ mixin _$LoginUser on _LoginUserBase, Store {
     }, _$logoutRealizadoAtom, name: '${_$logoutRealizadoAtom.name}_set');
   }
 
+  final _$emailParaRecuperarAtom =
+      Atom(name: '_LoginUserBase.emailParaRecuperar');
+
+  @override
+  String get emailParaRecuperar {
+    _$emailParaRecuperarAtom.context
+        .enforceReadPolicy(_$emailParaRecuperarAtom);
+    _$emailParaRecuperarAtom.reportObserved();
+    return super.emailParaRecuperar;
+  }
+
+  @override
+  set emailParaRecuperar(String value) {
+    _$emailParaRecuperarAtom.context.conditionallyRunInAction(() {
+      super.emailParaRecuperar = value;
+      _$emailParaRecuperarAtom.reportChanged();
+    }, _$emailParaRecuperarAtom, name: '${_$emailParaRecuperarAtom.name}_set');
+  }
+
+  final _$botaoRecuperarSenhaAcionadoAtom =
+      Atom(name: '_LoginUserBase.botaoRecuperarSenhaAcionado');
+
+  @override
+  bool get botaoRecuperarSenhaAcionado {
+    _$botaoRecuperarSenhaAcionadoAtom.context
+        .enforceReadPolicy(_$botaoRecuperarSenhaAcionadoAtom);
+    _$botaoRecuperarSenhaAcionadoAtom.reportObserved();
+    return super.botaoRecuperarSenhaAcionado;
+  }
+
+  @override
+  set botaoRecuperarSenhaAcionado(bool value) {
+    _$botaoRecuperarSenhaAcionadoAtom.context.conditionallyRunInAction(() {
+      super.botaoRecuperarSenhaAcionado = value;
+      _$botaoRecuperarSenhaAcionadoAtom.reportChanged();
+    }, _$botaoRecuperarSenhaAcionadoAtom,
+        name: '${_$botaoRecuperarSenhaAcionadoAtom.name}_set');
+  }
+
+  final _$estadorecuperarsenhaAtom =
+      Atom(name: '_LoginUserBase.estadorecuperarsenha');
+
+  @override
+  ESTADORECUPERARSENHA get estadorecuperarsenha {
+    _$estadorecuperarsenhaAtom.context
+        .enforceReadPolicy(_$estadorecuperarsenhaAtom);
+    _$estadorecuperarsenhaAtom.reportObserved();
+    return super.estadorecuperarsenha;
+  }
+
+  @override
+  set estadorecuperarsenha(ESTADORECUPERARSENHA value) {
+    _$estadorecuperarsenhaAtom.context.conditionallyRunInAction(() {
+      super.estadorecuperarsenha = value;
+      _$estadorecuperarsenhaAtom.reportChanged();
+    }, _$estadorecuperarsenhaAtom,
+        name: '${_$estadorecuperarsenhaAtom.name}_set');
+  }
+
   final _$loginAsyncAction = AsyncAction('login');
 
   @override
@@ -293,6 +366,36 @@ mixin _$LoginUser on _LoginUserBase, Store {
   }
 
   @override
+  dynamic setEmailParaRecuperar(String email) {
+    final _$actionInfo = _$_LoginUserBaseActionController.startAction();
+    try {
+      return super.setEmailParaRecuperar(email);
+    } finally {
+      _$_LoginUserBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setBotaoRecuperarSenhaAcionado(bool botaoRecuperarSenha) {
+    final _$actionInfo = _$_LoginUserBaseActionController.startAction();
+    try {
+      return super.setBotaoRecuperarSenhaAcionado(botaoRecuperarSenha);
+    } finally {
+      _$_LoginUserBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setEstadoRecuperarSenha(ESTADORECUPERARSENHA estado) {
+    final _$actionInfo = _$_LoginUserBaseActionController.startAction();
+    try {
+      return super.setEstadoRecuperarSenha(estado);
+    } finally {
+      _$_LoginUserBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void zearVariaveis() {
     final _$actionInfo = _$_LoginUserBaseActionController.startAction();
     try {
@@ -305,7 +408,7 @@ mixin _$LoginUser on _LoginUserBase, Store {
   @override
   String toString() {
     final string =
-        'state: ${state.toString()},confPassword: ${confPassword.toString()},cadastrarLoading: ${cadastrarLoading.toString()},cadastroSucess: ${cadastroSucess.toString()},cadastroCompletoConcluido: ${cadastroCompletoConcluido.toString()},cadastroconcluidoestado: ${cadastroconcluidoestado.toString()},estadoPaginaAoIniciarAplicativo: ${estadoPaginaAoIniciarAplicativo.toString()},logoutRealizado: ${logoutRealizado.toString()},validatePassword: ${validatePassword.toString()},verificarEstadoPaginaInicial: ${verificarEstadoPaginaInicial.toString()},logoutRealizadoUsuario: ${logoutRealizadoUsuario.toString()},inserir: ${inserir.toString()},habilitarLogin: ${habilitarLogin.toString()},isValid: ${isValid.toString()}';
+        'state: ${state.toString()},confPassword: ${confPassword.toString()},cadastrarLoading: ${cadastrarLoading.toString()},cadastroSucess: ${cadastroSucess.toString()},cadastroCompletoConcluido: ${cadastroCompletoConcluido.toString()},cadastroconcluidoestado: ${cadastroconcluidoestado.toString()},estadoPaginaAoIniciarAplicativo: ${estadoPaginaAoIniciarAplicativo.toString()},logoutRealizado: ${logoutRealizado.toString()},emailParaRecuperar: ${emailParaRecuperar.toString()},botaoRecuperarSenhaAcionado: ${botaoRecuperarSenhaAcionado.toString()},estadorecuperarsenha: ${estadorecuperarsenha.toString()},validatePassword: ${validatePassword.toString()},verificarEstadoPaginaInicial: ${verificarEstadoPaginaInicial.toString()},logoutRealizadoUsuario: ${logoutRealizadoUsuario.toString()},buttonEmailParaRecuperarIsValid: ${buttonEmailParaRecuperarIsValid.toString()},retornarbotaoRecuperarSenhaAcionado: ${retornarbotaoRecuperarSenhaAcionado.toString()},inserir: ${inserir.toString()},habilitarLogin: ${habilitarLogin.toString()},isValid: ${isValid.toString()}';
     return '{$string}';
   }
 }

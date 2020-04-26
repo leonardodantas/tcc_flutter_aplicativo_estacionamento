@@ -9,6 +9,7 @@ part 'login_user.g.dart';
 enum STATES { IDEL, SUCCESS, FAIL }
 enum CADASTROCONCLUIDOESTADO { IDEL, SUCCESS, FAIL }
 enum ESTADOPAGINAAOINICIARAPLICATIVO { CARREGANDO, LOGADO, NAOLOGADO }
+enum ESTADORECUPERARSENHA { IDEL, SUCCESS, FAIL }
 
 class LoginUser = _LoginUserBase with _$LoginUser;
 
@@ -97,6 +98,49 @@ abstract class _LoginUserBase with Store {
   @computed
   bool get logoutRealizadoUsuario {
     return logoutRealizado;
+  }
+
+  @observable
+  String emailParaRecuperar;
+
+  @action
+  setEmailParaRecuperar(String email) => emailParaRecuperar = email;
+
+  @computed
+  bool get buttonEmailParaRecuperarIsValid {
+    return validarCampoEmailParaRecuperar() == null &&
+        emailParaRecuperar != null;
+  }
+
+  String validarCampoEmailParaRecuperar() {
+    if (emailParaRecuperar != null)
+      return EmailValidator.validate(emailParaRecuperar)
+          ? null
+          : "Campo Obrigatorio";
+    return null;
+  }
+
+  @observable
+  bool botaoRecuperarSenhaAcionado = false;
+
+  @action
+  setBotaoRecuperarSenhaAcionado(bool botaoRecuperarSenha) =>
+      botaoRecuperarSenhaAcionado = botaoRecuperarSenha;
+
+  @computed
+  bool get retornarbotaoRecuperarSenhaAcionado {
+    return botaoRecuperarSenhaAcionado;
+  }
+
+  @observable
+  ESTADORECUPERARSENHA estadorecuperarsenha = ESTADORECUPERARSENHA.IDEL;
+
+  @action
+  setEstadoRecuperarSenha(ESTADORECUPERARSENHA estado) =>
+      estadorecuperarsenha = estado;
+
+  ESTADORECUPERARSENHA get estadoTelaRecuperarSenha {
+    return estadorecuperarsenha;
   }
 
   @action
@@ -205,6 +249,21 @@ abstract class _LoginUserBase with Store {
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  enviarEmailParaRecuperarSenha() async {
+    setBotaoRecuperarSenhaAcionado(true);
+    _firebaseAuth = FirebaseAuth.instance;
+    try {
+      setEstadoRecuperarSenha(ESTADORECUPERARSENHA.SUCCESS);
+
+      await _firebaseAuth.sendPasswordResetEmail(email: emailParaRecuperar);
+    } catch (e) {
+      setEstadoRecuperarSenha(ESTADORECUPERARSENHA.FAIL);
+    } finally {
+      setEmailParaRecuperar("");
+      setBotaoRecuperarSenhaAcionado(false);
     }
   }
 

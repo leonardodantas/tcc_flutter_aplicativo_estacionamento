@@ -1,3 +1,4 @@
+import 'package:feira/screens/recuperar_tela.dart';
 import 'package:feira/screens/tela_inicial_usuario.dart';
 import 'package:feira/screens/verificacao_screen.dart';
 import 'package:feira/store/login_user.dart';
@@ -39,20 +40,20 @@ class _LoginState extends State<Login> {
 
     _disposers.add(autorun((_) async {
       switch (_loginUser.state) {
-        
         case STATES.IDEL:
           break;
         case STATES.SUCCESS:
           _formKeyScreen1.currentState.reset();
-          if(!_loginUser.usuario.cadastroConcluido){
+          if (!_loginUser.usuario.cadastroConcluido) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => Verificacao()));
+          } else {
             Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Verificacao()));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TelaInicialUsuarioScreen()));
           }
-          else {
-            Navigator.push(
-              context, MaterialPageRoute(builder: (context) => TelaInicialUsuarioScreen()));
-          }
-          
+
           break;
         case STATES.FAIL:
           _formKeyScreen1.currentState.reset();
@@ -121,7 +122,15 @@ class _LoginState extends State<Login> {
                 else
                   return ButtonLoading(
                       corBorda: Colors.blue, corContainer: Colors.blue);
-              })
+              }),
+              SizedBox(height: 30),
+              FlatButton(
+                child: Container(child: Text("Esqueci minha senha",style: TextStyle(color: Colors.blue),)),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => RecuperarTelaScreen()));
+                },
+              )
             ],
           ),
         ),
