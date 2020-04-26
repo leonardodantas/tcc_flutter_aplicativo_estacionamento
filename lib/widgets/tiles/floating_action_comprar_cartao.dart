@@ -11,7 +11,7 @@ class FloatingActionComprarCartao extends StatelessWidget {
     return FloatingActionButton(
       
       onPressed: onPressed,
-      child: Icon(Icons.credit_card, color: Colors.blue,size: 50,),
+      child: Icon(Icons.monetization_on, color: Colors.blue,size: 50,),
       backgroundColor: Colors.white,
     );
   }

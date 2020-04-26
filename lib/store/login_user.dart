@@ -199,6 +199,13 @@ abstract class _LoginUserBase with Store {
           .collection("qtd_cartoes")
           .document(uid)
           .setData({"qtd": 0});
+
+      _firestore
+          .collection("users")
+          .document(uid)
+          .collection("cartao_ativo")
+          .document(uid)
+          .setData({"cartao": null});
     }).catchError((e) {
       cadastrarLoading = false;
       state = STATES.FAIL;

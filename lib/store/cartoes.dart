@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feira/data/meio_pagamento.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 part 'cartoes.g.dart';
 
@@ -9,10 +9,14 @@ class Cartoes = _CartoesBase with _$Cartoes;
 enum ESTADOTELADECOMPRA { IDLE, AGUARDANDO }
 enum ESTADOCOMPRA { NULL, SUCESSO, FALHA }
 enum ESTADOCARREGANDOQUANTIDADECARTOES {CARREGANDO, SUCCESS}
+enum ESTADOATUALIZARCARTAO {IDEL, SUCCESS, FAIL}
 
 abstract class _CartoesBase with Store {
+  
   FirebaseAuth _auth;
   Firestore _firestore;
+
+  var meioPagamento = MeioPagamento();
 
   @observable
   double valorUnitario = 1;
@@ -81,6 +85,28 @@ abstract class _CartoesBase with Store {
   @computed
   ESTADOCOMPRA get retornarEstadoCompra {
     return estadoCompra;
+  }
+
+  @observable
+  bool cadastrarNovoCartao = false;
+
+  @action
+  setCadastrarNovoCartao(bool novoCartao) => cadastrarNovoCartao = novoCartao;
+
+  @computed 
+  bool get getVerificarCadastrandoNovoCartao {
+    return cadastrarNovoCartao;
+  }
+
+  @observable
+  ESTADOATUALIZARCARTAO estadoatualizarcartao = ESTADOATUALIZARCARTAO.IDEL;
+
+  @action
+  setEstadoAtualizarCartao(ESTADOATUALIZARCARTAO estado) => estadoatualizarcartao = estado;
+
+  @computed 
+  ESTADOATUALIZARCARTAO get getEstadoAoAtualizarCartao {
+    return estadoatualizarcartao;
   }
 
   @action
@@ -164,4 +190,44 @@ abstract class _CartoesBase with Store {
       print(e);
     }
   }
+
+  atualizarCartaoUsuario() async {
+    print("LEO");
+    setCadastrarNovoCartao(true);
+    _auth = FirebaseAuth.instance;
+
+    FirebaseUser user = await _auth.currentUser();
+    String uid = user.uid;
+     var dados = meioPagamento.toMap();
+    try {
+    print(meioPagamento.getCardHolderName);
+    print(dados);
+    await _firestore
+          .collection("users")
+          .document(uid)
+          .collection("cartao_ativo")
+          .document(uid)
+          .updateData({"cartao": meioPagamento.toMap()});
+          
+    setEstadoAtualizarCartao(ESTADOATUALIZARCARTAO.SUCCESS);
+      
+    } catch (e) {
+      setEstadoAtualizarCartao(ESTADOATUALIZARCARTAO.FAIL);
+    } finally {
+
+    setCadastrarNovoCartao(false);
+    }
+    
+
+  }
+
+  bool get botaoAtualizarCartaoPagamento {
+    return meioPagamento.getCardHolderName.isNotEmpty &&
+           meioPagamento.getNovoExperityDate.isNotEmpty &&
+           meioPagamento.getNumeroCartao.isNotEmpty;
+
+  }
+
+
+
 }

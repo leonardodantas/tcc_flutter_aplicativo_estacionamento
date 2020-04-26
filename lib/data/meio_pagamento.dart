@@ -60,5 +60,14 @@ abstract class _MeioPagamentoBase with Store {
   bool get getShowBack {
     return showBack;
   }
+
+  Map<String, dynamic> toMap(){
+    return {
+      "cardNumber": cardNumber,
+      "cardHolderName": cardHolderName,
+      "expiryDate": expiryDate,
+      "cvv": cvv
+    };
+  }
   
 }

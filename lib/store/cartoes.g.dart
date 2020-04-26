@@ -45,6 +45,20 @@ mixin _$Cartoes on _CartoesBase, Store {
   ESTADOCOMPRA get retornarEstadoCompra => (_$retornarEstadoCompraComputed ??=
           Computed<ESTADOCOMPRA>(() => super.retornarEstadoCompra))
       .value;
+  Computed<bool> _$getVerificarCadastrandoNovoCartaoComputed;
+
+  @override
+  bool get getVerificarCadastrandoNovoCartao =>
+      (_$getVerificarCadastrandoNovoCartaoComputed ??=
+              Computed<bool>(() => super.getVerificarCadastrandoNovoCartao))
+          .value;
+  Computed<ESTADOATUALIZARCARTAO> _$getEstadoAoAtualizarCartaoComputed;
+
+  @override
+  ESTADOATUALIZARCARTAO get getEstadoAoAtualizarCartao =>
+      (_$getEstadoAoAtualizarCartaoComputed ??= Computed<ESTADOATUALIZARCARTAO>(
+              () => super.getEstadoAoAtualizarCartao))
+          .value;
 
   final _$valorUnitarioAtom = Atom(name: '_CartoesBase.valorUnitario');
 
@@ -192,6 +206,46 @@ mixin _$Cartoes on _CartoesBase, Store {
     }, _$estadoCompraAtom, name: '${_$estadoCompraAtom.name}_set');
   }
 
+  final _$cadastrarNovoCartaoAtom =
+      Atom(name: '_CartoesBase.cadastrarNovoCartao');
+
+  @override
+  bool get cadastrarNovoCartao {
+    _$cadastrarNovoCartaoAtom.context
+        .enforceReadPolicy(_$cadastrarNovoCartaoAtom);
+    _$cadastrarNovoCartaoAtom.reportObserved();
+    return super.cadastrarNovoCartao;
+  }
+
+  @override
+  set cadastrarNovoCartao(bool value) {
+    _$cadastrarNovoCartaoAtom.context.conditionallyRunInAction(() {
+      super.cadastrarNovoCartao = value;
+      _$cadastrarNovoCartaoAtom.reportChanged();
+    }, _$cadastrarNovoCartaoAtom,
+        name: '${_$cadastrarNovoCartaoAtom.name}_set');
+  }
+
+  final _$estadoatualizarcartaoAtom =
+      Atom(name: '_CartoesBase.estadoatualizarcartao');
+
+  @override
+  ESTADOATUALIZARCARTAO get estadoatualizarcartao {
+    _$estadoatualizarcartaoAtom.context
+        .enforceReadPolicy(_$estadoatualizarcartaoAtom);
+    _$estadoatualizarcartaoAtom.reportObserved();
+    return super.estadoatualizarcartao;
+  }
+
+  @override
+  set estadoatualizarcartao(ESTADOATUALIZARCARTAO value) {
+    _$estadoatualizarcartaoAtom.context.conditionallyRunInAction(() {
+      super.estadoatualizarcartao = value;
+      _$estadoatualizarcartaoAtom.reportChanged();
+    }, _$estadoatualizarcartaoAtom,
+        name: '${_$estadoatualizarcartaoAtom.name}_set');
+  }
+
   final _$verificarQuantidadeDeCartoesUsuarioAsyncAction =
       AsyncAction('verificarQuantidadeDeCartoesUsuario');
 
@@ -253,9 +307,29 @@ mixin _$Cartoes on _CartoesBase, Store {
   }
 
   @override
+  dynamic setCadastrarNovoCartao(bool novoCartao) {
+    final _$actionInfo = _$_CartoesBaseActionController.startAction();
+    try {
+      return super.setCadastrarNovoCartao(novoCartao);
+    } finally {
+      _$_CartoesBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setEstadoAtualizarCartao(ESTADOATUALIZARCARTAO estado) {
+    final _$actionInfo = _$_CartoesBaseActionController.startAction();
+    try {
+      return super.setEstadoAtualizarCartao(estado);
+    } finally {
+      _$_CartoesBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     final string =
-        'valorUnitario: ${valorUnitario.toString()},valorTotal: ${valorTotal.toString()},cartaoSelecionado: ${cartaoSelecionado.toString()},qtdCartoesUsuario: ${qtdCartoesUsuario.toString()},estadoteladecompra: ${estadoteladecompra.toString()},compraRealizadaSucesso: ${compraRealizadaSucesso.toString()},estadoCompra: ${estadoCompra.toString()},quantidadeDeCartoesDoUsuario: ${quantidadeDeCartoesDoUsuario.toString()},estadocarreadoquantidadecartoes: ${estadocarreadoquantidadecartoes.toString()},verificarEstadoTelaDeCompra: ${verificarEstadoTelaDeCompra.toString()},retornarComprarRealizadaSucesso: ${retornarComprarRealizadaSucesso.toString()},retornarEstadoCompra: ${retornarEstadoCompra.toString()}';
+        'valorUnitario: ${valorUnitario.toString()},valorTotal: ${valorTotal.toString()},cartaoSelecionado: ${cartaoSelecionado.toString()},qtdCartoesUsuario: ${qtdCartoesUsuario.toString()},estadoteladecompra: ${estadoteladecompra.toString()},compraRealizadaSucesso: ${compraRealizadaSucesso.toString()},estadoCompra: ${estadoCompra.toString()},cadastrarNovoCartao: ${cadastrarNovoCartao.toString()},estadoatualizarcartao: ${estadoatualizarcartao.toString()},quantidadeDeCartoesDoUsuario: ${quantidadeDeCartoesDoUsuario.toString()},estadocarreadoquantidadecartoes: ${estadocarreadoquantidadecartoes.toString()},verificarEstadoTelaDeCompra: ${verificarEstadoTelaDeCompra.toString()},retornarComprarRealizadaSucesso: ${retornarComprarRealizadaSucesso.toString()},retornarEstadoCompra: ${retornarEstadoCompra.toString()},getVerificarCadastrandoNovoCartao: ${getVerificarCadastrandoNovoCartao.toString()},getEstadoAoAtualizarCartao: ${getEstadoAoAtualizarCartao.toString()}';
     return '{$string}';
   }
 }
