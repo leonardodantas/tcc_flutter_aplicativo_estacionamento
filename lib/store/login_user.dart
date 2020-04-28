@@ -77,8 +77,7 @@ abstract class _LoginUserBase with Store {
 
       mudarEstadoPaginaLogin(STATES.SUCCESS);
     } catch (e) {
-      print('--------------------------------');
-      print(e);
+     
       mudarEstadoPaginaLogin(STATES.FAIL);
     }
   }

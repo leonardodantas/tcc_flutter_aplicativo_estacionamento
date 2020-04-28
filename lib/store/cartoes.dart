@@ -8,11 +8,10 @@ class Cartoes = _CartoesBase with _$Cartoes;
 
 enum ESTADOTELADECOMPRA { IDLE, AGUARDANDO }
 enum ESTADOCOMPRA { NULL, SUCESSO, FALHA }
-enum ESTADOCARREGANDOQUANTIDADECARTOES {CARREGANDO, SUCCESS}
-enum ESTADOATUALIZARCARTAO {IDEL, SUCCESS, FAIL}
+enum ESTADOCARREGANDOQUANTIDADECARTOES { CARREGANDO, SUCCESS }
+enum ESTADOATUALIZARCARTAO { IDEL, SUCCESS, FAIL }
 
 abstract class _CartoesBase with Store {
-  
   FirebaseAuth _auth;
   Firestore _firestore;
 
@@ -31,7 +30,8 @@ abstract class _CartoesBase with Store {
   double qtdCartoesUsuario = 0;
 
   @action
-  alterarQuantidadeCartoesUsuario(double novaQuantidade) => qtdCartoesUsuario = novaQuantidade;
+  alterarQuantidadeCartoesUsuario(double novaQuantidade) =>
+      qtdCartoesUsuario = novaQuantidade;
 
   @computed
   get quantidadeDeCartoesDoUsuario {
@@ -42,13 +42,14 @@ abstract class _CartoesBase with Store {
   ESTADOCARREGANDOQUANTIDADECARTOES _estadocarregandoquantidadecartoes;
 
   @computed
-  ESTADOCARREGANDOQUANTIDADECARTOES get estadocarreadoquantidadecartoes  {
+  ESTADOCARREGANDOQUANTIDADECARTOES get estadocarreadoquantidadecartoes {
     return _estadocarregandoquantidadecartoes;
   }
 
   @action
-  alterarEstadoCarregandoQuantidadeCartoes(ESTADOCARREGANDOQUANTIDADECARTOES novoEstado) => _estadocarregandoquantidadecartoes = novoEstado;
-
+  alterarEstadoCarregandoQuantidadeCartoes(
+          ESTADOCARREGANDOQUANTIDADECARTOES novoEstado) =>
+      _estadocarregandoquantidadecartoes = novoEstado;
 
   double get retornarValorTotal {
     return valorTotal;
@@ -93,7 +94,7 @@ abstract class _CartoesBase with Store {
   @action
   setCadastrarNovoCartao(bool novoCartao) => cadastrarNovoCartao = novoCartao;
 
-  @computed 
+  @computed
   bool get getVerificarCadastrandoNovoCartao {
     return cadastrarNovoCartao;
   }
@@ -102,31 +103,45 @@ abstract class _CartoesBase with Store {
   ESTADOATUALIZARCARTAO estadoatualizarcartao = ESTADOATUALIZARCARTAO.IDEL;
 
   @action
-  setEstadoAtualizarCartao(ESTADOATUALIZARCARTAO estado) => estadoatualizarcartao = estado;
+  setEstadoAtualizarCartao(ESTADOATUALIZARCARTAO estado) =>
+      estadoatualizarcartao = estado;
 
-  @computed 
+  @computed
   ESTADOATUALIZARCARTAO get getEstadoAoAtualizarCartao {
     return estadoatualizarcartao;
   }
 
+  @observable
+  bool informacoesCartao = false;
+
   @action
-  verificarQuantidadeDeCartoesUsuario() async{
-    alterarEstadoCarregandoQuantidadeCartoes(ESTADOCARREGANDOQUANTIDADECARTOES.CARREGANDO);
+  setInformacaoCartao(bool info) => informacoesCartao = info;
+
+  @computed
+  bool get retornarInformacaoCartao {
+    return informacoesCartao;
+  }
+
+  @action
+  verificarQuantidadeDeCartoesUsuario() async {
+    alterarEstadoCarregandoQuantidadeCartoes(
+        ESTADOCARREGANDOQUANTIDADECARTOES.CARREGANDO);
     _auth = FirebaseAuth.instance;
     _firestore = Firestore.instance;
-    String uid  = await recuperarUidUsuario();
+    String uid = await recuperarUidUsuario();
     double valor = await recuperarQuantidadeDeCartoesDoUsuario(uid);
     alterarQuantidadeCartoesUsuario(valor);
-    alterarEstadoCarregandoQuantidadeCartoes(ESTADOCARREGANDOQUANTIDADECARTOES.SUCCESS);
+    alterarEstadoCarregandoQuantidadeCartoes(
+        ESTADOCARREGANDOQUANTIDADECARTOES.SUCCESS);
   }
 
   Future<double> recuperarQuantidadeDeCartoesDoUsuario(String uid) async {
     DocumentSnapshot documentSnapshot = await _firestore
-          .collection("users")
-          .document(uid)
-          .collection("qtd_cartoes")
-          .document(uid)
-          .get();
+        .collection("users")
+        .document(uid)
+        .collection("qtd_cartoes")
+        .document(uid)
+        .get();
     double valor = double.parse(documentSnapshot.data["qtd"].toString());
     return valor;
   }
@@ -142,7 +157,7 @@ abstract class _CartoesBase with Store {
 
     _auth = FirebaseAuth.instance;
     _firestore = Firestore.instance;
-    String uid  = await recuperarUidUsuario();
+    String uid = await recuperarUidUsuario();
 
     try {
       Map<String, dynamic> data = convertCartoesComprados();
@@ -176,7 +191,8 @@ abstract class _CartoesBase with Store {
   atualizarQuantidadeDeCartoesUsuario(
       String uid, Firestore _firestore, FirebaseAuth _auth) async {
     try {
-      double quantidadeUsuario = await recuperarQuantidadeDeCartoesDoUsuario(uid);
+      double quantidadeUsuario =
+          await recuperarQuantidadeDeCartoesDoUsuario(uid);
       double quantidadeComprada = valorTotal;
 
       double novaQuantidade = quantidadeComprada + quantidadeUsuario.toDouble();
@@ -192,42 +208,54 @@ abstract class _CartoesBase with Store {
   }
 
   atualizarCartaoUsuario() async {
-    print("LEO");
     setCadastrarNovoCartao(true);
     _auth = FirebaseAuth.instance;
 
-    FirebaseUser user = await _auth.currentUser();
-    String uid = user.uid;
-     var dados = meioPagamento.toMap();
+    String uid = await recuperarUidUsuario();
+
     try {
-    print(meioPagamento.getCardHolderName);
-    print(dados);
-    await _firestore
+      await _firestore
           .collection("users")
           .document(uid)
           .collection("cartao_ativo")
           .document(uid)
           .updateData({"cartao": meioPagamento.toMap()});
-          
-    setEstadoAtualizarCartao(ESTADOATUALIZARCARTAO.SUCCESS);
-      
+
+      setEstadoAtualizarCartao(ESTADOATUALIZARCARTAO.SUCCESS);
     } catch (e) {
       setEstadoAtualizarCartao(ESTADOATUALIZARCARTAO.FAIL);
     } finally {
-
-    setCadastrarNovoCartao(false);
+      setCadastrarNovoCartao(false);
     }
-    
-
   }
 
   bool get botaoAtualizarCartaoPagamento {
     return meioPagamento.getCardHolderName.isNotEmpty &&
-           meioPagamento.getNovoExperityDate.isNotEmpty &&
-           meioPagamento.getNumeroCartao.isNotEmpty;
-
+        meioPagamento.getNovoExperityDate.isNotEmpty &&
+        meioPagamento.getNumeroCartao.isNotEmpty;
   }
 
+  @action
+  Future verificarCartaoCadastrado() async {
+    setInformacaoCartao(false);
+    String uid = await recuperarUidUsuario();
+    try {
+      var dados = await _firestore
+          .collection("users")
+          .document(uid)
+          .collection("cartao_ativo")
+          .document(uid)
+          .get();
 
-
+      if (dados.data["cartao"]["cardNumber"] != null) {
+        await meioPagamento.toDataMeioPagamento(dados.data["cartao"]);
+      } else {
+        await meioPagamento.meioPagamentoToNull();
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      setInformacaoCartao(true);
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobx/mobx.dart';
 part 'meio_pagamento.g.dart';
 
@@ -68,6 +69,20 @@ abstract class _MeioPagamentoBase with Store {
       "expiryDate": expiryDate,
       "cvv": cvv
     };
+  }
+
+  toDataMeioPagamento(Map<String, dynamic> document) async {
+    cardNumber = document["cardNumber"];
+    cardHolderName = document["cardHolderName"];
+    expiryDate = document["expiryDate"];
+    cvv = document["cvv"];
+  }
+
+  meioPagamentoToNull(){
+    cardNumber = "XXXX XXXX XXXX XXXX";
+    cardHolderName = "Card Holder";
+    expiryDate = "MM/YY";
+    cvv = "XXX";
   }
   
 }
