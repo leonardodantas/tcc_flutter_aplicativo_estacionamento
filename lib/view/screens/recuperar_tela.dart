@@ -1,8 +1,7 @@
-import 'package:email_validator/email_validator.dart';
-import 'package:feira/store/login_user.dart';
-import 'package:feira/widgets/tiles/button_loading.dart';
-import 'package:feira/widgets/tiles/buttonbig_tile.dart';
-import 'package:feira/widgets/tiles/input_tile.dart';
+import 'package:feira/controller/store/login_user.dart';
+import 'package:feira/view/widgets/tiles/button_loading.dart';
+import 'package:feira/view/widgets/tiles/buttonbig_tile.dart';
+import 'package:feira/view/widgets/tiles/input_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feira/data/meio_pagamento.dart';
+import 'package:feira/model/data/meio_pagamento.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobx/mobx.dart';
 part 'cartoes.g.dart';

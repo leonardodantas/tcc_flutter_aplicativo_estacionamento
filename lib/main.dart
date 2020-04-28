@@ -1,9 +1,9 @@
-import 'package:feira/screens/cadastro_completo_screen.dart';
-import 'package:feira/screens/home_screen.dart';
-import 'package:feira/store/cartoes.dart';
-import 'package:feira/store/login_user.dart';
+
+import 'package:feira/view/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'controller/store/cartoes.dart';
+import 'controller/store/login_user.dart';
 
 void main() {
 

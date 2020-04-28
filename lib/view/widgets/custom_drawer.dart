@@ -1,5 +1,5 @@
-import 'package:feira/store/login_user.dart';
-import 'package:feira/widgets/tiles/drawer_tile.dart';
+import 'package:feira/controller/store/login_user.dart';
+import 'package:feira/view/widgets/tiles/drawer_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 

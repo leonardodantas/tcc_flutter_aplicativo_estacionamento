@@ -1,6 +1,6 @@
-import 'package:feira/screens/cadastro_completo_screen.dart';
-import 'package:feira/screens/tela_inicial_usuario.dart';
-import 'package:feira/widgets/tiles/button_verificacao.dart';
+import 'package:feira/view/screens/cadastro_completo_screen.dart';
+import 'package:feira/view/screens/tela_inicial_usuario.dart';
+import 'package:feira/view/widgets/tiles/button_verificacao.dart';
 import 'package:flutter/material.dart';
 
 class Verificacao extends StatefulWidget {

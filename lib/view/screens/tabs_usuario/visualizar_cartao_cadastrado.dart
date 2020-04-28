@@ -1,5 +1,5 @@
 import 'package:awesome_card/awesome_card.dart';
-import 'package:feira/store/cartoes.dart';
+import 'package:feira/controller/store/cartoes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';

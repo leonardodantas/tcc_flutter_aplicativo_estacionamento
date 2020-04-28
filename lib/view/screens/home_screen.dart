@@ -1,8 +1,8 @@
-import 'package:feira/screens/login_screen.dart';
-import 'package:feira/screens/signup_screen.dart';
-import 'package:feira/screens/tela_inicial_usuario.dart';
-import 'package:feira/store/login_user.dart';
-import 'package:feira/widgets/tiles/buttonbig_tile.dart';
+import 'package:feira/controller/store/login_user.dart';
+import 'package:feira/view/screens/login_screen.dart';
+import 'package:feira/view/screens/signup_screen.dart';
+import 'package:feira/view/screens/tela_inicial_usuario.dart';
+import 'package:feira/view/widgets/tiles/buttonbig_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';

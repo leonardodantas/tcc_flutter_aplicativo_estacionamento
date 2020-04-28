@@ -1,10 +1,10 @@
-import 'package:feira/screens/recuperar_tela.dart';
-import 'package:feira/screens/tela_inicial_usuario.dart';
-import 'package:feira/screens/verificacao_screen.dart';
-import 'package:feira/store/login_user.dart';
-import 'package:feira/widgets/tiles/button_loading.dart';
-import 'package:feira/widgets/tiles/buttonbig_tile.dart';
-import 'package:feira/widgets/tiles/input_tile.dart';
+import 'package:feira/controller/store/login_user.dart';
+import 'package:feira/view/screens/recuperar_tela.dart';
+import 'package:feira/view/screens/tela_inicial_usuario.dart';
+import 'package:feira/view/screens/verificacao_screen.dart';
+import 'package:feira/view/widgets/tiles/button_loading.dart';
+import 'package:feira/view/widgets/tiles/buttonbig_tile.dart';
+import 'package:feira/view/widgets/tiles/input_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';

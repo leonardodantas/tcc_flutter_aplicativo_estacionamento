@@ -1,12 +1,11 @@
-import 'package:feira/screens/comprar_cartoes_screen.dart';
-import 'package:feira/screens/home_screen.dart';
-import 'package:feira/screens/inserir_novo_cartao.dart';
-import 'package:feira/screens/tabs_usuario/inicio_usuario.dart';
-import 'package:feira/screens/tabs_usuario/visualizar_cartao_cadastrado.dart';
-import 'package:feira/store/login_user.dart';
-import 'package:feira/widgets/custom_drawer.dart';
-import 'package:feira/widgets/tiles/floating_action_atualizar_pagamento.dart';
-import 'package:feira/widgets/tiles/floating_action_comprar_cartao.dart';
+import 'package:feira/controller/store/login_user.dart';
+import 'package:feira/view/screens/comprar_cartoes_screen.dart';
+import 'package:feira/view/screens/inserir_novo_cartao.dart';
+import 'package:feira/view/screens/tabs_usuario/inicio_usuario.dart';
+import 'package:feira/view/screens/tabs_usuario/visualizar_cartao_cadastrado.dart';
+import 'package:feira/view/widgets/custom_drawer.dart';
+import 'package:feira/view/widgets/tiles/floating_action_atualizar_pagamento.dart';
+import 'package:feira/view/widgets/tiles/floating_action_comprar_cartao.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
@@ -42,7 +41,7 @@ class _TelaInicialUsuarioScreenState extends State<TelaInicialUsuarioScreen> {
   Widget build(BuildContext context) {
     return PageView(
       controller: _pageCotroller,
-      //physics: NeverScrollableScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
         Scaffold(
           appBar: AppBar(
