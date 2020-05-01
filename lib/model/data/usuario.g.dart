@@ -9,6 +9,13 @@ part of 'usuario.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$Usuario on _UsuarioBase, Store {
+  Computed<bool> _$verificarEmailVerificadoComputed;
+
+  @override
+  bool get verificarEmailVerificado => (_$verificarEmailVerificadoComputed ??=
+          Computed<bool>(() => super.verificarEmailVerificado))
+      .value;
+
   final _$idAtom = Atom(name: '_UsuarioBase.id');
 
   @override
@@ -213,6 +220,23 @@ mixin _$Usuario on _UsuarioBase, Store {
     }, _$sexoAtom, name: '${_$sexoAtom.name}_set');
   }
 
+  final _$emailVerificadoAtom = Atom(name: '_UsuarioBase.emailVerificado');
+
+  @override
+  bool get emailVerificado {
+    _$emailVerificadoAtom.context.enforceReadPolicy(_$emailVerificadoAtom);
+    _$emailVerificadoAtom.reportObserved();
+    return super.emailVerificado;
+  }
+
+  @override
+  set emailVerificado(bool value) {
+    _$emailVerificadoAtom.context.conditionallyRunInAction(() {
+      super.emailVerificado = value;
+      _$emailVerificadoAtom.reportChanged();
+    }, _$emailVerificadoAtom, name: '${_$emailVerificadoAtom.name}_set');
+  }
+
   final _$_UsuarioBaseActionController = ActionController(name: '_UsuarioBase');
 
   @override
@@ -316,9 +340,19 @@ mixin _$Usuario on _UsuarioBase, Store {
   }
 
   @override
+  dynamic changeEmailVerificado(bool verificado) {
+    final _$actionInfo = _$_UsuarioBaseActionController.startAction();
+    try {
+      return super.changeEmailVerificado(verificado);
+    } finally {
+      _$_UsuarioBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     final string =
-        'id: ${id.toString()},cadastroConcluido: ${cadastroConcluido.toString()},name: ${name.toString()},email: ${email.toString()},password: ${password.toString()},profissao: ${profissao.toString()},cpf: ${cpf.toString()},data: ${data.toString()},renda: ${renda.toString()},cep: ${cep.toString()},celular: ${celular.toString()},sexo: ${sexo.toString()}';
+        'id: ${id.toString()},cadastroConcluido: ${cadastroConcluido.toString()},name: ${name.toString()},email: ${email.toString()},password: ${password.toString()},profissao: ${profissao.toString()},cpf: ${cpf.toString()},data: ${data.toString()},renda: ${renda.toString()},cep: ${cep.toString()},celular: ${celular.toString()},sexo: ${sexo.toString()},emailVerificado: ${emailVerificado.toString()},verificarEmailVerificado: ${verificarEmailVerificado.toString()}';
     return '{$string}';
   }
 }

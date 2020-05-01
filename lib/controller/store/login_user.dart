@@ -72,7 +72,7 @@ abstract class _LoginUserBase with Store {
     try {
       var auth = await _firebaseAuth.signInWithEmailAndPassword(
           email: usuario.email, password: usuario.password);
-
+      usuario.changeEmailVerificado(auth.user.isEmailVerified);
       await recuperarTodosOsDadosDoUsuario(auth.user.uid);
 
       mudarEstadoPaginaLogin(STATES.SUCCESS);
@@ -157,7 +157,10 @@ abstract class _LoginUserBase with Store {
     _firebaseAuth = FirebaseAuth.instance;
     FirebaseUser firebaseUser = await _firebaseAuth.currentUser();
 
+
+ 
     if (firebaseUser != null) {
+      usuario.changeEmailVerificado(firebaseUser.isEmailVerified);
       await recuperarTodosOsDadosDoUsuario(firebaseUser.uid);
       alterarEstadoTelaInicial(ESTADOPAGINAAOINICIARAPLICATIVO.LOGADO);
     } else {
@@ -181,6 +184,8 @@ abstract class _LoginUserBase with Store {
         .createUserWithEmailAndPassword(
             email: usuario.email.trim(), password: usuario.password)
         .then((user) {
+      user.user.sendEmailVerification();
+      usuario.changeEmailVerificado(user.user.isEmailVerified);
       var uid = user.user.uid;
       var novoUsuario = usuario.toMap();
       cadastrarLoading = false;
@@ -271,6 +276,11 @@ abstract class _LoginUserBase with Store {
       setEmailParaRecuperar("");
       setBotaoRecuperarSenhaAcionado(false);
     }
+  }
+
+  enviarEmailDeConfirmacao() async {
+    FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+    firebaseUser.sendEmailVerification();
   }
 
   @computed

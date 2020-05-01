@@ -1,7 +1,9 @@
 import 'package:feira/controller/store/login_user.dart';
 import 'package:feira/view/widgets/tiles/drawer_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:toast/toast.dart';
 
 class CustomDrawer extends StatelessWidget {
   final PageController pageController;
@@ -12,8 +14,10 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _loginUser = GetIt.I.get<LoginUser>();
+
     //criação do Drawer
     return Drawer(
+      
       child: Stack(
         children: <Widget>[
           //utilização de uma lista do menu
@@ -43,10 +47,33 @@ class CustomDrawer extends StatelessWidget {
                     DrawerTiler(Icons.list, "Cupons", pageController, 1),
                     DrawerTiler(
                         Icons.directions_car, "Automoveis", pageController, 2),
-                    DrawerTiler(Icons.credit_card, "Pagamentos",
-                        pageController, 3),
+                    DrawerTiler(
+                        Icons.credit_card, "Pagamentos", pageController, 3),
                     DrawerTiler(Icons.playlist_add_check, "Configurações",
                         pageController, 4),
+                    Observer(builder: (_) {
+                      if (!_loginUser.usuario.emailVerificado) {
+                        return Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.white),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50))),
+                          child: FlatButton(
+                            child: Text("Verifique seu e-mail",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.red)), //color: Colors.green,
+
+                            onPressed: () {
+                              _showDialog(context);
+                            },
+                          ),
+                        );
+                      } else
+                        return Container();
+                    })
                   ],
                 ),
               ),
@@ -92,5 +119,41 @@ class CustomDrawer extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  _showDialog(BuildContext context){
+     showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Verifique seu email!"),
+          content: new Text(
+              "Caso ainda não tenha recebido o email de confirmação, podemos reenvia-lo a você"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Reenvie o email"),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            new FlatButton(
+              child: new Text("Sair"),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+           
+          ],
+        );
+  }).then((v){
+      if(v){
+        _loginUser.enviarEmailDeConfirmacao();
+        Toast.show("Email reenviado", context, duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      }
+     
+  });
+  
   }
 }

@@ -64,6 +64,15 @@ abstract class _UsuarioBase with Store {
   @action
   changeSexo(String newSexo) => sexo = newSexo;
 
+  @observable
+  bool emailVerificado;
+  @action
+  changeEmailVerificado(bool verificado) => emailVerificado = verificado;
+  @computed
+  bool get verificarEmailVerificado {
+    return emailVerificado;
+  }
+
   String siglaNomeUsuario;
 
   Map<String, dynamic> toMap() {
@@ -81,7 +90,6 @@ abstract class _UsuarioBase with Store {
   void criarSiglaParaOUsuario() {
     List<String> nomeDividido = name.split(' ');
     String siglaNome = '';
-    print(nomeDividido);
     nomeDividido.forEach((n) => siglaNome += n.toUpperCase().substring(0, 1));
     siglaNomeUsuario = siglaNome.substring(0, 1) + siglaNome.substring(1, 2);
   }
