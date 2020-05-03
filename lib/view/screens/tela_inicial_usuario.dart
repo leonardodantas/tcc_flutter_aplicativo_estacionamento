@@ -1,9 +1,11 @@
 import 'package:feira/controller/store/login_user.dart';
 import 'package:feira/view/screens/comprar_cartoes_screen.dart';
 import 'package:feira/view/screens/inserir_novo_cartao.dart';
+import 'package:feira/view/screens/tabs_usuario/automovel.dart';
 import 'package:feira/view/screens/tabs_usuario/inicio_usuario.dart';
 import 'package:feira/view/screens/tabs_usuario/visualizar_cartao_cadastrado.dart';
 import 'package:feira/view/widgets/custom_drawer.dart';
+import 'package:feira/view/widgets/tiles/floating_action_adicionar_veiculo.dart';
 import 'package:feira/view/widgets/tiles/floating_action_atualizar_pagamento.dart';
 import 'package:feira/view/widgets/tiles/floating_action_comprar_cartao.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +70,11 @@ class _TelaInicialUsuarioScreenState extends State<TelaInicialUsuarioScreen> {
               title: Text("Automoveis"),
               centerTitle: true,
             ),
-            body: Container(color: Colors.green),
+            body: Container(color: Colors.white,),
+            floatingActionButton: FloatingActionAdicionarVeiculo(onPressed: (){
+            Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AdicionarAutomovel()));
+          },),
             drawer: CustomDrawer(_pageCotroller)),
             
         Scaffold(

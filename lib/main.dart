@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'controller/store/cartoes.dart';
 import 'controller/store/login_user.dart';
+import 'controller/store/veiculo_controller.dart';
 
 void main() {
 
   GetIt getIt = GetIt.I;
   getIt.registerSingleton<LoginUser>(LoginUser());
   getIt.registerSingleton<Cartoes>(Cartoes());
+  getIt.registerSingleton<VeiculoController>(VeiculoController());
 
   runApp(MyApp());
 
