@@ -11,8 +11,8 @@ class FloatingActionAdicionarVeiculo extends StatelessWidget {
     return FloatingActionButton(
       
       onPressed: onPressed,
-      child: Icon(Icons.directions_car, color: Colors.blue,size: 50,),
-      backgroundColor: Colors.white,
+      child: Icon(Icons.directions_car, color: Colors.white,size: 50,),
+      backgroundColor: Colors.blue,
     );
   }
 }
