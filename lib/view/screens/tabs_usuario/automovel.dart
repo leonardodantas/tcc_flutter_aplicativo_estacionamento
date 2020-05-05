@@ -85,7 +85,7 @@ class _AdicionarAutomovelState extends State<AdicionarAutomovel> {
                   SizedBox(height: 30,),
               Observer(builder: (_){
                 if(!_veiculoController.getCadastrarVeiculo){
-                  return ButtonBig(textoBotao: "Pesquisar", corBorda: Colors.blue, corTexto: Colors.white, corContainer: Colors.blue, function: _veiculoController.veiculo.verificarPlaca ? _veiculoController.inserirVeiculo : null);
+                  return ButtonBig(textoBotao: "Inserir", corBorda: Colors.blue, corTexto: Colors.white, corContainer: Colors.blue, function: _veiculoController.veiculo.verificarPlaca ? _veiculoController.inserirVeiculo : null);
                 } else {
                   return ButtonLoading(corContainer: Colors.blue, corBorda: Colors.blue,);
                 }

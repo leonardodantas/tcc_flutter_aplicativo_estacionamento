@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feira/model/data/veiculo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 
 part 'veiculo_controller.g.dart';
@@ -72,5 +73,23 @@ abstract class _VeiculoControllerBase with Store {
       print(e);
     }
     return firebaseUser;
+  }
+
+  Future<QuerySnapshot> listarTodosOsVeiculos() async {
+    
+    QuerySnapshot veiculos;
+    try {
+      _firestore = Firestore.instance;
+      FirebaseUser firebaseUser = await recuperarUidUsuario();
+      veiculos = await _firestore.collection("users").document(firebaseUser.uid)
+              .collection("automoveis").getDocuments();
+    } catch (e) {
+      print(e);
+    }
+    return veiculos;
+  }
+
+  int quantidadeDeVeiculos(int quantidade) {
+    return quantidade.isNaN ? 0 : quantidade;
   }
 }
